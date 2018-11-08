@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: Organise
-Version: 0.2.0
+Version: 0.2.5
 Summary: UNKNOWN
 Home-page: UNKNOWN
 Author: UNKNOWN
@@ -19,11 +19,15 @@ Description: # Auto Organise
         python setup.py install
         ```
         
+        or
+        
+        `pip install Organise`
+        
         ## Usage
         
         `organise`
         
         ### Help
-        `organise.py --help`
+        `organise --help`
         
 Platform: UNKNOWN

@@ -12,14 +12,20 @@ class Sort(object):
     OTHERS = "Others"
     APP = "Application"
 
-    files_type_list = [DOC, VIDEO, APP, OTHERS]
+    # Keep `OTHERS` at the end
+    files_type_list = [DOC, VIDEO, APP, IMG, OTHERS]
 
     file_type_dict = {
         'doc': DOC,
         'docx': DOC,
         'pdf': DOC,
+        'txt': DOC,
         '3gp': VIDEO,
         'mp4': VIDEO,
+        'jpeg': IMG,
+        'png': IMG,
+        'gif': IMG,
+        'jpg': IMG,
         "deb": APP,
         "py": APP
     }
@@ -32,8 +38,17 @@ class Sort(object):
         for type, i in zip(self.files_type_list, range(len(self.files_type_list))):
             t = input(f"What do you want {type} to be called? [{type}]: ")
             if t:
-                self.files_type_list[i] = t       
-    
+                self.files_type_list[i] = t
+
+    def get_supported_formats(self):
+        click.echo("Supported formats:")
+        i = 0
+        for key, value in self.file_type_dict.items():
+            i += 1
+            click.echo(f"\t{i}) {key} --> {value}")
+        click.echo("\tMore coming soon")
+        click.echo('Other file formats will be stored under Others')
+
     def get_absolute_path(self, filename):
         return self.path + "/" + filename
 
@@ -52,11 +67,6 @@ class Sort(object):
             self.create_directory(key)
         click.echo(f"Skipped {self.skipped}")
 
-    def get_supported_formats(self):
-        click.echo("Supported file formats:")
-        for key in self.file_type_dict.keys():
-            click.echo(key)
-
     def get_files(self):
         return next(os.walk(self.path))[2]
 
@@ -70,9 +80,7 @@ class Sort(object):
             else:
                 dest = self.get_absolute_path(self.files_type_list[-1])
             if not os.path.exists(dest):
-                click.echo(f"{dest} not found.")
-                click.echo("Skipping...")
-                continue
+                self.create_directory(dest)
             if verbose:
                 click.echo(f"Moving {name} to {dest}")
             os.system("mv" + " " + src + " " + dest)
@@ -94,8 +102,8 @@ class Sort(object):
     )
 @click.option(
     "--organise", "-o",
-    is_flag=False,
-    help='if you only want to organise'
+    is_flag=True,
+    help='do not create empty directory, ie. create directory only when relevent file exists.'
     )
 @click.option(
     "--verbose", "-v",
@@ -107,7 +115,12 @@ class Sort(object):
     is_flag=True,
     help='to rename the subdirectories, your way'
     )
-def cli(path, create_dir, organise, verbose, rename):
+@click.option(
+    "--formats", "-f",
+    is_flag=True,
+    help='display all the supported formats'
+    )
+def cli(path, create_dir, organise, verbose, rename, formats):
     """
         A little tool that helps you organise your directory into meaningful 
         subdirectories.
@@ -128,6 +141,8 @@ def cli(path, create_dir, organise, verbose, rename):
         sort.create_all_directory()
     elif organise:
         sort.sort(verbose)
+    elif formats:
+        sort.get_supported_formats()
     else:
         sort.run(verbose)
 
