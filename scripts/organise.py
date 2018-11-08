@@ -3,6 +3,7 @@ import os
 import sys
 import click
 import re
+from tqdm import tqdm
 
 if sys.version_info[0] < 3 and sys.version_info[1] < 6:
     raise Exception("You must be using Python 3.6 or greater")
@@ -79,7 +80,7 @@ class Sort(object):
 
     def sort(self, verbose=False):
         files = self.get_files()
-        for name in files:
+        for name in tqdm(files, disable=verbose):
             src = self.get_absolute_path(name)
             type = name.split('.')[-1]
             if type in self.file_type_dict.keys():
