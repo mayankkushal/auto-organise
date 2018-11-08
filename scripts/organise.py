@@ -102,7 +102,7 @@ class Sort(object):
     is_flag=True,
     help='to rename the subdirectories, your way'
     )
-def main(path, create_dir, sort, verbose, rename):
+def cli(path, create_dir, sort, verbose, rename):
     """
         A little tool that helps you organise your directory into meaningful 
         subdirectories.
@@ -128,4 +128,4 @@ def main(path, create_dir, sort, verbose, rename):
 
 
 if __name__ == "__main__":
-    main()
+    cli()
