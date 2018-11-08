@@ -2,6 +2,7 @@
 import os
 import sys
 import click
+import re
 
 if sys.version_info[0] < 3 and sys.version_info[1] < 6:
     raise Exception("You must be using Python 3.6 or greater")
@@ -87,7 +88,7 @@ class Sort(object):
                 self.create_directory(dest)
             if verbose:
                 click.echo("Moving {} to {}".format(name, dest))
-            os.system("mv" + " " + src + " " + dest)
+            os.system("mv" + " " + re.escape(src) + " " + dest)
 
     def run(self, verbose):
         self.create_all_directory()
