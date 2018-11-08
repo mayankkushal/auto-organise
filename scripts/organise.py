@@ -64,6 +64,7 @@ class Sort(object):
         files = self.get_files()
         for name in files:
             src = self.get_absolute_path(name)
+            type = name.split('.')[-1]
             if type in self.file_type_dict.keys():
                 dest = self.get_absolute_path(self.file_type_dict[type])
             else:
@@ -77,7 +78,7 @@ class Sort(object):
             os.system("mv" + " " + src + " " + dest)
 
     def run(self, verbose):
-        self.create_directory()
+        self.create_all_directory()
         self.sort(verbose)
 
 
@@ -92,8 +93,8 @@ class Sort(object):
     help='if you only want to create directories'
     )
 @click.option(
-    "--sort", "-s",
-    is_flag=True,
+    "--organise", "-o",
+    is_flag=False,
     help='if you only want to organise'
     )
 @click.option(
@@ -106,7 +107,7 @@ class Sort(object):
     is_flag=True,
     help='to rename the subdirectories, your way'
     )
-def cli(path, create_dir, sort, verbose, rename):
+def cli(path, create_dir, organise, verbose, rename):
     """
         A little tool that helps you organise your directory into meaningful 
         subdirectories.
@@ -125,10 +126,10 @@ def cli(path, create_dir, sort, verbose, rename):
 
     if create_dir:
         sort.create_all_directory()
-    elif sort:
+    elif organise:
         sort.sort(verbose)
     else:
-        sort.run()
+        sort.run(verbose)
 
 
 if __name__ == "__main__":
