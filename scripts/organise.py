@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import os
+import sys
 import click
+
+if sys.version_info[0] < 3 and sys.version_info[1] < 6:
+    raise Exception("You must be using Python 3.6 or greater")
 
 
 class Sort(object):
@@ -36,7 +40,7 @@ class Sort(object):
 
     def rename(self):
         for type, i in zip(self.files_type_list, range(len(self.files_type_list))):
-            t = input(f"What do you want {type} to be called? [{type}]: ")
+            t = input("What do you want {type} to be called? [{type}]: ")
             if t:
                 self.files_type_list[i] = t
 
