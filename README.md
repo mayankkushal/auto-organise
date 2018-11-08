@@ -11,9 +11,13 @@ cd auto-organise
 python setup.py install
 ```
 
+or
+
+`pip install Organise`
+
 ## Usage
 
 `organise`
 
 ### Help
-`organise.py --help`
+`organise --help`
