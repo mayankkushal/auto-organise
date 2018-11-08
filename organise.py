@@ -1,4 +1,4 @@
-# cli.py
+#!/usr/bin/env python
 import os
 import click
 
@@ -21,11 +21,18 @@ class Sort(object):
         '3gp': VIDEO,
         'mp4': VIDEO,
         "deb": APP,
+        "py": APP
     }
 
     def __init__(self, path):
         super(Sort, self).__init__()
         self.path = path
+
+    def rename(self):
+        for type, i in zip(self.files_type_list, range(len(self.files_type_list))):
+            t = input(f"What do you want {type} to be called? [{type}]: ")
+            if t:
+                self.files_type_list[i] = t       
     
     def get_absolute_path(self, filename):
         return self.path + "/" + filename
@@ -37,14 +44,14 @@ class Sort(object):
         os.makedirs(directory, exist_ok=True)
         print(f"{directory}...Successfull")
 
+    def create_all_directory(self):
+        for key in self.files_type_list:
+            self.create_directory(key)
+
     def get_supported_formats(self):
         print("Supported file formats:")
         for key in self.file_type_dict.keys():
             print(key)
-
-    def create_all_directory(self):
-        for key in self.files_type_list:
-            self.create_directory(key)
 
     def get_files(self):
         return next(os.walk(self.path))[2]
@@ -56,10 +63,11 @@ class Sort(object):
             if type in self.file_type_dict.keys():
                 dest = self.get_absolute_path(self.file_type_dict[type])
             else:
-                dest = self.get_absolute_path(OTHERS)
+                dest = self.get_absolute_path(self.files_type_list[-1])
             if not os.path.exists(dest):
-                print(f"{dest} not found, Creating Directory...")
-                self.create_directory(directory=dest)
+                print(f"{dest} not found.")
+                print("Skipping...")
+                continue
             if verbose:
                 print(f"Moving {name} to {dest}")
             os.system("mv" + " " + src + " " + dest)
@@ -81,8 +89,8 @@ class Sort(object):
     )
 @click.option(
     "--sort", "-s",
-    is_flag=False,
-    help='if you only want to sort'
+    is_flag=True,
+    help='if you only want to organise'
     )
 @click.option(
     "--verbose", "-v",
@@ -90,11 +98,11 @@ class Sort(object):
     help='lets you know about each step'
     )
 @click.option(
-    "--file-format", "-f",
+    "--rename", "-r",
     is_flag=True,
-    help='displays the list of all the supported file formats'
+    help='to rename the subdirectories, your way'
     )
-def main(path, create_dir, sort, verbose, file_format):
+def main(path, create_dir, sort, verbose, rename):
     """
         A little tool that helps you organise your directory into meaningful 
         subdirectories.
@@ -107,6 +115,9 @@ def main(path, create_dir, sort, verbose, file_format):
 
     path = get_path(path)
     sort = Sort(path)
+
+    if rename:
+        sort.rename()
 
     if create_dir:
         sort.create_all_directory()
