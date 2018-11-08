@@ -40,7 +40,7 @@ class Sort(object):
 
     def rename(self):
         for type, i in zip(self.files_type_list, range(len(self.files_type_list))):
-            t = input("What do you want {type} to be called? [{type}]: ")
+            t = input("What do you want {} to be called? [{}]: ".format(type, type))
             if t:
                 self.files_type_list[i] = t
 
@@ -49,7 +49,7 @@ class Sort(object):
         i = 0
         for key, value in self.file_type_dict.items():
             i += 1
-            click.echo(f"\t{i}) {key} --> {value}")
+            click.echo("\t{}) {} --> {}".format(i, key, value))
         click.echo("\tMore coming soon")
         click.echo('Other file formats will be stored under Others')
 
@@ -61,7 +61,7 @@ class Sort(object):
             directory = self.path+"/"+key
         if not os.path.exists(directory):   
             os.makedirs(directory, exist_ok=True)
-            click.echo(f"{directory}...Successfull")
+            click.echo("{}...Successfull".format(directory))
         else:
             self.skipped += 1
 
@@ -69,7 +69,7 @@ class Sort(object):
         self.skipped = 0
         for key in self.files_type_list:
             self.create_directory(key)
-        click.echo(f"Skipped {self.skipped}")
+        click.echo("Skipped {}".format(self.skipped))
 
     def get_files(self):
         return next(os.walk(self.path))[2]
