@@ -40,18 +40,22 @@ class Sort(object):
     def create_directory(self, key=None, directory=None):
         if not directory:
             directory = self.path+"/"+key
-
-        os.makedirs(directory, exist_ok=True)
-        print(f"{directory}...Successfull")
+        if not os.path.exists(directory):   
+            os.makedirs(directory, exist_ok=True)
+            click.echo(f"{directory}...Successfull")
+        else:
+            self.skipped += 1
 
     def create_all_directory(self):
+        self.skipped = 0
         for key in self.files_type_list:
             self.create_directory(key)
+        click.echo(f"Skipped {self.skipped}")
 
     def get_supported_formats(self):
-        print("Supported file formats:")
+        click.echo("Supported file formats:")
         for key in self.file_type_dict.keys():
-            print(key)
+            click.echo(key)
 
     def get_files(self):
         return next(os.walk(self.path))[2]
@@ -65,11 +69,11 @@ class Sort(object):
             else:
                 dest = self.get_absolute_path(self.files_type_list[-1])
             if not os.path.exists(dest):
-                print(f"{dest} not found.")
-                print("Skipping...")
+                click.echo(f"{dest} not found.")
+                click.echo("Skipping...")
                 continue
             if verbose:
-                print(f"Moving {name} to {dest}")
+                click.echo(f"Moving {name} to {dest}")
             os.system("mv" + " " + src + " " + dest)
 
     def run(self, verbose):
