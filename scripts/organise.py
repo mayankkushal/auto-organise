@@ -86,7 +86,7 @@ class Sort(object):
             if not os.path.exists(dest):
                 self.create_directory(dest)
             if verbose:
-                click.echo(f"Moving {name} to {dest}")
+                click.echo("Moving {} to {}".format(name, dest))
             os.system("mv" + " " + src + " " + dest)
 
     def run(self, verbose):
