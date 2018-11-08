@@ -23,6 +23,8 @@ class Sort(object):
     file_type_dict = {
         'doc': DOC,
         'docx': DOC,
+        'ppt': DOC,
+        'pptx': DOC,
         'pdf': DOC,
         'txt': DOC,
         '3gp': VIDEO,
