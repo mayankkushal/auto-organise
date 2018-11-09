@@ -1,6 +1,6 @@
 Metadata-Version: 1.0
 Name: Organise
-Version: 1.0.0
+Version: 1.1.0
 Summary: UNKNOWN
 Home-page: UNKNOWN
 Author: UNKNOWN
@@ -29,5 +29,8 @@ Description: # Auto Organise
         
         ### Help
         `organise --help`
+        
+        
+        For comprehensive details [Read the docs](https://mayankkushal.github.io/auto-organise/)
         
 Platform: UNKNOWN
