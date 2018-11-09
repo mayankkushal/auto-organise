@@ -5,11 +5,15 @@ import click
 import re
 from tqdm import tqdm
 
+import json
+
+from mixins import ConfigHandelingMixin
+
 if sys.version_info[0] < 3 and sys.version_info[1] < 6:
     raise Exception("You must be using Python 3.6 or greater")
 
 
-class Sort(object):
+class Sort(ConfigHandelingMixin):
     """ This is a simple tool which helps to organise your cluttered directory
     into meaningful subdirectories.
 
@@ -39,7 +43,7 @@ class Sort(object):
     APP = "Application"
 
     # Keep `OTHERS` at the end
-    files_type_list = [DOC, VIDEO, APP, IMG, OTHERS]
+    files_type_list = [DOC, VIDEO, APP, IMG] + [OTHERS,]
 
     file_type_dict = {
         'doc': DOC,
@@ -61,6 +65,10 @@ class Sort(object):
     def __init__(self, path):
         super(Sort, self).__init__()
         self.path = path
+
+        self.config = self.get_config_file
+        if not self.config:
+            self.generate_config_file()
 
     def rename(self):
         """
@@ -182,7 +190,12 @@ class Sort(object):
     is_flag=True,
     help='display all the supported formats'
     )
-def cli(path, create_dir, organise, verbose, rename, formats):
+@click.option(
+    "--config", "-c",
+    is_flag=True,
+    help='generates the config file'
+    )
+def cli(path, create_dir, organise, verbose, rename, formats, config):
     """
         A little tool that helps you organise your directory into meaningful 
         subdirectories.
@@ -205,6 +218,8 @@ def cli(path, create_dir, organise, verbose, rename, formats):
         sort.sort(verbose)
     elif formats:
         sort.get_supported_formats()
+    elif config:
+        sort.generate_config_file()
     else:
         sort.run(verbose)
 
