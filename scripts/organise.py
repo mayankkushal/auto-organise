@@ -10,7 +10,27 @@ if sys.version_info[0] < 3 and sys.version_info[1] < 6:
 
 
 class Sort(object):
-    """docstring for Sort"""
+    """ This is a simple tool which helps to organise your cluttered directory
+    into meaningful subdirectories.
+
+    **Example**:
+
+        We are going to move the files into directories of their respective kinds, and if there are no files of that kind, a directory will not be
+        created.
+
+            $ organise -o
+            or
+            $ organise --organise
+
+    Check out `organise --help` for complete list of options
+    
+    *Todo*:
+
+        * Create configuration files, for easier handeling of settings
+        * Handle console messages gracefully
+        * Make it OS agnostic
+    
+    """
 
     DOC = "Document"
     VIDEO = "Video"
@@ -43,12 +63,18 @@ class Sort(object):
         self.path = path
 
     def rename(self):
+        """
+            Function used to rename the directories to user defined names
+        """
         for type, i in zip(self.files_type_list, range(len(self.files_type_list))):
             t = input("What do you want {} to be called? [{}]: ".format(type, type))
             if t:
                 self.files_type_list[i] = t
 
     def get_supported_formats(self):
+        """
+            Used to dispaly all the supported formats, ie which will be sorted into respective directories
+        """
         click.echo("Supported formats:")
         i = 0
         for key, value in self.file_type_dict.items():
@@ -58,9 +84,30 @@ class Sort(object):
         click.echo('Other file formats will be stored under Others')
 
     def get_absolute_path(self, filename):
+        """Creates the complete path name and returns for the file
+
+        Args:
+
+            filename (str): Expects the name of the file
+
+        Returns:
+
+            str: The absolute path of the file
+
+        """
         return self.path + "/" + filename
 
     def create_directory(self, key=None, directory=None):
+        """Creates a directory, if it does not exist.
+
+        Args:
+
+            key (str): [optional] This is the name of the file
+            directory (str): [optional] This is the complete path of the file
+
+        **Note**: One of the, Args are to be passed.
+
+        """
         if not directory:
             directory = self.path+"/"+key
         if not os.path.exists(directory):   
@@ -70,15 +117,22 @@ class Sort(object):
             self.skipped += 1
 
     def create_all_directory(self):
+        """Creates all the types of directories."""
         self.skipped = 0
         for key in self.files_type_list:
             self.create_directory(key)
         click.echo("Skipped {}".format(self.skipped))
 
     def get_files(self):
+        """Function used to generate a list of all the files in the current directory"""
         return next(os.walk(self.path))[2]
 
     def sort(self, verbose=False):
+        """Main function which is used to organise the files into different directories.
+        Args:
+
+            verbose (bool): [optional] If `True`, displays all the steps to the user
+        """
         files = self.get_files()
         for name in tqdm(files, disable=verbose):
             src = self.get_absolute_path(name)
