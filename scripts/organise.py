@@ -31,6 +31,7 @@ class Sort(object):
         * Make it OS agnostic
     
     """
+    verbose = False
 
     DOC = "Document"
     VIDEO = "Video"
@@ -39,7 +40,7 @@ class Sort(object):
     APP = "Application"
 
     # Keep `OTHERS` at the end
-    files_type_list = [DOC, VIDEO, APP, IMG, OTHERS]
+    files_type_list = [DOC, VIDEO, APP, IMG] + [OTHERS,]
 
     file_type_dict = {
         'doc': DOC,
@@ -112,7 +113,8 @@ class Sort(object):
             directory = self.path+"/"+key
         if not os.path.exists(directory):   
             os.makedirs(directory, exist_ok=True)
-            click.echo("{}...Successfull".format(directory))
+            if self.verbose:
+                click.echo("Creating --> {} --> Successfull".format(directory.split("/")[-1]))
         else:
             self.skipped += 1
 
@@ -121,7 +123,8 @@ class Sort(object):
         self.skipped = 0
         for key in self.files_type_list:
             self.create_directory(key)
-        click.echo("Skipped {}".format(self.skipped))
+        if self.verbose:
+            click.echo("Skipped {}".format(self.skipped))
 
     def get_files(self):
         """Function used to generate a list of all the files in the current directory"""
@@ -133,8 +136,9 @@ class Sort(object):
 
             verbose (bool): [optional] If `True`, displays all the steps to the user
         """
+        self.verbose = verbose
         files = self.get_files()
-        for name in tqdm(files, disable=verbose):
+        for name in tqdm(files, disable=self.verbose):
             src = self.get_absolute_path(name)
             type = name.split('.')[-1]
             if type in self.file_type_dict.keys():
@@ -143,11 +147,12 @@ class Sort(object):
                 dest = self.get_absolute_path(self.files_type_list[-1])
             if not os.path.exists(dest):
                 self.create_directory(dest)
-            if verbose:
+            if self.verbose:
                 click.echo("Moving {} to {}".format(name, dest))
             os.system("mv" + " " + re.escape(src) + " " + dest)
 
     def run(self, verbose):
+        self.verbose = verbose
         self.create_all_directory()
         self.sort(verbose)
 
