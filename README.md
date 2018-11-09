@@ -23,4 +23,4 @@ or
 `organise --help`
 
 
-For comprehensive details [Read the docs](https://mayankkushal.github.io/auto-organise/>)
+For comprehensive details [Read the docs](https://mayankkushal.github.io/auto-organise/)
