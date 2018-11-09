@@ -21,3 +21,6 @@ or
 
 ### Help
 `organise --help`
+
+
+For comprehensive details [Read the docs](https://mayankkushal.github.io/auto-organise/>)
