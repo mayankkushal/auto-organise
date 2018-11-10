@@ -7,7 +7,9 @@ from tqdm import tqdm
 
 import json
 
+from organise_config import *
 from mixins import ConfigHandelingMixin
+
 
 if sys.version_info[0] < 3 and sys.version_info[1] < 6:
     raise Exception("You must be using Python 3.6 or greater")
@@ -36,48 +38,37 @@ class Sort(ConfigHandelingMixin):
     
     """
 
-    DOC = "Document"
-    VIDEO = "Video"
-    IMG = "Image"
-    OTHERS = "Others"
-    APP = "Application"
-
-    # Keep `OTHERS` at the end
-    files_type_list = [DOC, VIDEO, APP, IMG] + [OTHERS,]
-
-    file_type_dict = {
-        'doc': DOC,
-        'docx': DOC,
-        'ppt': DOC,
-        'pptx': DOC,
-        'pdf': DOC,
-        'txt': DOC,
-        '3gp': VIDEO,
-        'mp4': VIDEO,
-        'jpeg': IMG,
-        'png': IMG,
-        'gif': IMG,
-        'jpg': IMG,
-        "deb": APP,
-        "py": APP
-    }
-
     def __init__(self, path):
         super(Sort, self).__init__()
         self.path = path
-
-        self.config = self.get_config_file
-        if not self.config:
-            self.generate_config_file()
+        self.validate_variables()
 
     def rename(self):
         """
             Function used to rename the directories to user defined names
         """
-        for type, i in zip(self.files_type_list, range(len(self.files_type_list))):
+        for type, i in zip(files_type_list, range(len(files_type_list))):
             t = input("What do you want {} to be called? [{}]: ".format(type, type))
             if t:
                 self.files_type_list[i] = t
+
+    def validate_variables(self):
+        try:
+            if files_type_list:
+                global OTHERS
+                try:
+                    if not OTHERS:
+                        OTHERS = "Others"
+                except NameError:
+                    OTHERS = "Others"
+                files_type_list.append(OTHERS)
+        except NameError:
+            click.echo("`files_type_list` incorrectly configured")
+        try:
+            if file_type_dict:
+                pass
+        except NameError:
+            click.echo("`file_type_dict` incorrectly configured")
 
     def get_supported_formats(self):
         """
@@ -85,7 +76,7 @@ class Sort(ConfigHandelingMixin):
         """
         click.echo("Supported formats:")
         i = 0
-        for key, value in self.file_type_dict.items():
+        for key, value in file_type_dict.items():
             i += 1
             click.echo("\t{}) {} --> {}".format(i, key, value))
         click.echo("\tMore coming soon")
@@ -127,7 +118,7 @@ class Sort(ConfigHandelingMixin):
     def create_all_directory(self):
         """Creates all the types of directories."""
         self.skipped = 0
-        for key in self.files_type_list:
+        for key in files_type_list:
             self.create_directory(key)
         click.echo("Skipped {}".format(self.skipped))
 
@@ -145,10 +136,10 @@ class Sort(ConfigHandelingMixin):
         for name in tqdm(files, disable=verbose):
             src = self.get_absolute_path(name)
             type = name.split('.')[-1]
-            if type in self.file_type_dict.keys():
-                dest = self.get_absolute_path(self.file_type_dict[type])
+            if type in file_type_dict.keys():
+                dest = self.get_absolute_path(file_type_dict[type])
             else:
-                dest = self.get_absolute_path(self.files_type_list[-1])
+                dest = self.get_absolute_path(files_type_list[-1])
             if not os.path.exists(dest):
                 self.create_directory(dest)
             if verbose:
