@@ -36,10 +36,14 @@ setup(
     name=NAME,
     version=VERSION,
     packages=find_packages(),
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    url='https://github.com/mayankkushal/auto-organise',
+    description=DESCRIPTION,
     license='Creative Commons Attribution-Noncommercial-Share Alike license',
     long_description=open('README.md').read(),
     install_requires=[
-        'Click',
+        'Click', 'tqdm'
     ],
     entry_points='''
         [console_scripts]
