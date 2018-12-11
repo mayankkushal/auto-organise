@@ -6,4 +6,6 @@ Organise.egg-info/dependency_links.txt
 Organise.egg-info/entry_points.txt
 Organise.egg-info/requires.txt
 Organise.egg-info/top_level.txt
+scripts/__init__.py
+scripts/nautilus_gui.py
 scripts/organise.py
