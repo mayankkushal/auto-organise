@@ -53,7 +53,7 @@ URL = 'https://github.com/mayankkushal/auto-organise'
 EMAIL = 'mayankkushal26@gmail.com'
 AUTHOR = 'Mayank Kushal'
 REQUIRES_PYTHON = '>=3.5.0'
-VERSION = "1.5.0"
+VERSION = "2.0.0"
 
 # What packages are required for this module to be executed?
 REQUIRED = [

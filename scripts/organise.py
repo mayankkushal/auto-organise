@@ -130,7 +130,20 @@ class Sort(object):
         """Function used to generate a list of all the files in the current directory"""
         return next(os.walk(self.path))[2]
 
-    def sort(self, verbose=False):
+    def get_dest(self, type):
+        """
+        returns the destination of the file, if its any from the supported type, it is assigned
+        to relevent directory, else it is sent to Other
+
+        Args: 
+            type: extension of the file
+
+        """
+        if type in self.file_type_dict.keys():
+            return self.get_absolute_path(self.file_type_dict[type])
+        return self.get_absolute_path(self.files_type_list[-1])
+
+    def sort(self, verbose=False, selected=None):
         """Main function which is used to organise the files into different directories.
         Args:
 
@@ -140,16 +153,29 @@ class Sort(object):
         files = self.get_files()
         for name in tqdm(files, disable=self.verbose):
             src = self.get_absolute_path(name)
+            dest = None
             type = name.split('.')[-1]
-            if type in self.file_type_dict.keys():
-                dest = self.get_absolute_path(self.file_type_dict[type])
-            else:
-                dest = self.get_absolute_path(self.files_type_list[-1])
+
+            if selected:
+                current_type = self.file_type_dict.get(type) or self.OTHERS
+                if current_type in selected:
+                    dest = self.get_dest(type)
+                else: continue
+
+            dest = dest or self.get_dest(type)
             if not os.path.exists(dest):
                 self.create_directory(dest)
             if self.verbose:
                 click.echo("Moving {} to {}".format(name, dest))
             os.system("mv" + " " + re.escape(src) + " " + dest)
+    
+    def selective(self):
+        click.echo("Which file types do you want to organise?")
+        for i in range(len(self.files_type_list)):
+            click.echo("\t{}: {}".format(i+1, self.files_type_list[i]))
+        click.echo("Enter the file type index separated by a comma (,), ex: 1, 2")
+        file_types = [self.files_type_list[int(index.strip()) - 1] for index in input().split(',')]
+        self.sort(selected=file_types)
 
     def run(self, verbose):
         self.verbose = verbose
@@ -170,7 +196,7 @@ class Sort(object):
 @click.option(
     "--organise", "-o",
     is_flag=True,
-    help='do not create empty directory, ie. create directory only when relevent file exists.'
+    help='create all the directories, even if they are empty.'
     )
 @click.option(
     "--verbose", "-v",
@@ -187,7 +213,12 @@ class Sort(object):
     is_flag=True,
     help='display all the supported formats'
     )
-def cli(path, create_dir, organise, verbose, rename, formats):
+@click.option(
+    "--selective", "-s",
+    is_flag=True,
+    help='sort only selected file formats'
+    )
+def cli(path, create_dir, organise, verbose, rename, formats, selective):
     """
         A little tool that helps you organise your directory into meaningful 
         subdirectories.
@@ -207,11 +238,13 @@ def cli(path, create_dir, organise, verbose, rename, formats):
     if create_dir:
         sort.create_all_directory()
     elif organise:
-        sort.sort(verbose)
+        sort.run(verbose)
     elif formats:
         sort.get_supported_formats()
-    else:
-        sort.run(verbose)
+    elif selective:
+        sort.selective()
+    else: 
+        sort.sort(verbose)
 
 
 if __name__ == "__main__":

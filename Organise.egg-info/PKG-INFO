@@ -1,12 +1,13 @@
 Metadata-Version: 1.0
 Name: Organise
-Version: 1.5.0
+Version: 2.0.0
 Summary: A little tool that helps you organise your directory into meaningful subdirectories.
 Home-page: https://github.com/mayankkushal/auto-organise
 Author: Mayank Kushal
 Author-email: mayankkushal26@gmail.com
 License: Creative Commons Attribution-Noncommercial-Share Alike license
-Description: # Auto Organise
+Description: [![Downloads](https://pepy.tech/badge/organise)](https://pepy.tech/project/organise)  [![Downloads](https://pepy.tech/badge/organise/month)](https://pepy.tech/project/organise/month)  [![Downloads](https://pepy.tech/badge/organise/week)](https://pepy.tech/project/organise/week)
+        # Auto Organise
         
          A little tool that helps you organise your directory into meaningful subdirectories.
         
@@ -30,7 +31,11 @@ Description: # Auto Organise
         ### Help
         `organise --help`
         
-        
         For comprehensive details [Read the docs](https://mayankkushal.github.io/auto-organise/)
+        
+        <br/><br/>
+        
+        Version 2.0.0
+        * added support for selective filetypes to be organised
         
 Platform: UNKNOWN

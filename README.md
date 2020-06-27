@@ -23,5 +23,9 @@ or
 ### Help
 `organise --help`
 
-
 For comprehensive details [Read the docs](https://mayankkushal.github.io/auto-organise/)
+
+<br/><br/>
+
+Version 2.0.0
+* added support for selective filetypes to be organised
