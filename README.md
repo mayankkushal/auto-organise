@@ -1,4 +1,4 @@
-[![Downloads](https://pepy.tech/badge/organise)](https://pepy.tech/project/organise)[![Downloads](https://pepy.tech/badge/organise/month)](https://pepy.tech/project/organise/month)[![Downloads](https://pepy.tech/badge/organise/week)](https://pepy.tech/project/organise/week)
+[![Downloads](https://pepy.tech/badge/organise)](https://pepy.tech/project/organise)  [![Downloads](https://pepy.tech/badge/organise/month)](https://pepy.tech/project/organise/month)  [![Downloads](https://pepy.tech/badge/organise/week)](https://pepy.tech/project/organise/week)
 # Auto Organise
 
  A little tool that helps you organise your directory into meaningful subdirectories.
