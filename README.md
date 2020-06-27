@@ -1,3 +1,4 @@
+[![Downloads](https://pepy.tech/badge/organise)](https://pepy.tech/project/organise)
 # Auto Organise
 
  A little tool that helps you organise your directory into meaningful subdirectories.
