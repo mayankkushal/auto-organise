@@ -28,4 +28,6 @@ For comprehensive details [Read the docs](https://mayankkushal.github.io/auto-or
 <br/><br/>
 
 Version 2.0.0
-* added support for selective filetypes to be organised
+* added support for selective filetypes to be organised.
+* changed default behavior, where just calling `organise` creates only those directories for which there are valid files.
+* changed use of `-o`, `--organise`, this now creates all the directories even if they do not have any files to put into it.
